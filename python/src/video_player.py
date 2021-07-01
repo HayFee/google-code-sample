@@ -1,6 +1,7 @@
 """A video player class."""
 
 from .video_library import VideoLibrary
+import random
 
 
 class VideoPlayer:
@@ -8,6 +9,7 @@ class VideoPlayer:
 
     def __init__(self):
         self._video_library = VideoLibrary()
+        self.video_playing = None
 
     def number_of_videos(self):
         num_videos = len(self._video_library.get_all_videos())
@@ -15,8 +17,9 @@ class VideoPlayer:
 
     def show_all_videos(self):
         """Returns all videos."""
-
-        print("show_all_videos needs implementation")
+        videos = self._video_library.get_all_videos()
+        for video in videos:
+            print(video.title, '('+str(video.video_id)+')', '['+str(video.tags)+']')
 
     def play_video(self, video_id):
         """Plays the respective video.
@@ -24,17 +27,27 @@ class VideoPlayer:
         Args:
             video_id: The video_id to be played.
         """
-        print("play_video needs implementation")
+
+        current = self._video_library.get_video(video_id)
+        self.video_playing = current
+        print("Playing video:", current.title)
 
     def stop_video(self):
         """Stops the current video."""
 
-        print("stop_video needs implementation")
+        if self.video_playing != None:
+            print("Stopping video:", self.video_playing.title)
+            self.video_playing = None
+            print("Video stopped")
+        else:
+            print("Cannot stop video: No video is currently playing")
 
     def play_random_video(self):
         """Plays a random video from the video library."""
 
-        print("play_random_video needs implementation")
+        if self.video_playing != None:
+            self.stop_video()
+        self.play_video(self._video_library.get_video(self._video_library.get_all_videos()[random.randint(1,5)]))
 
     def pause_video(self):
         """Pauses the current video."""
